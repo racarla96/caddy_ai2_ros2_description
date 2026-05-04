@@ -1,0 +1,32 @@
+# Physical parameters of the Caddy AI2 robot
+# Single source of truth: read by launch files and passed to Jinja2 templates
+# for Gazebo SDF, controllers YAML, MVSim XML, and any future backends.
+
+wheelbase: 1.65       # Distance between front and rear axles (m)
+track_width: 0.91     # Distance between left and right wheel centers (m)
+wheel_radius: 0.235   # Wheel radius (m)
+max_steer_angle: 0.4  # Maximum steering angle, software command limit (rad)
+
+# Fixed structural properties
+wheel_width: 0.22               # Wheel width (m)
+wheel_mass: 8.7                 # Mass of each wheel (kg)
+height: 0.25                    # Body height used for inertia (m)
+mass: 590                       # Total vehicle mass (kg)
+vehicle_collision_width: 1.230  # Collision box width (m)
+vehicle_collision_length: 2.660 # Collision box length (m)
+vehicle_collision_height: 1.7   # Collision box height (m)
+vehicle_collision_offset_x: -0.25   # Collision box X offset from base (m)
+inertial_origin_offset_x: -0.275    # Inertial origin X offset from base (m)
+
+# SICK LMS 291 mounting pose relative to base_link
+# Measured on real vehicle: sensor center at 0.29 m from ground
+#   lidar_sick_x = wheelbase/2  (above front axle, on centerline)
+#   lidar_sick_z = 0.29 - wheel_radius = 0.055 m
+# Consistency check: 3D dist from front wheel center to LIDAR
+#   sqrt((track_width/2)^2 + lidar_sick_z^2) = sqrt(0.455^2 + 0.055^2) ≈ 0.458 m ≈ 45.5 cm ✓
+lidar_sick_x: 0.825    # = wheelbase/2 (m)
+lidar_sick_y: 0.0
+lidar_sick_z: 0.055    # 0.29 m from ground - 0.235 m wheel_radius (m)
+lidar_sick_roll: 0.0
+lidar_sick_pitch: 0.0
+lidar_sick_yaw: 0.0

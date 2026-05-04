@@ -17,7 +17,7 @@ Paquete ROS 2 para el robot agrícola Caddy AI2, un vehículo de 4 ruedas con ge
 
 ```
 caddy_ai2/
-├── caddy_ai2_description/           # Modelo 3D y URDF
+├── caddy_ai2_ros2_description/           # Modelo 3D y URDF
 │   ├── urdf/                          # Archivos XACRO
 │   ├── meshes/                         # STL del chasis y ruedas
 │   ├── config/                          # Configuración RViz
@@ -82,7 +82,7 @@ git clone https://github.com/racarla96/caddy_ai2.git
 ### 3. Compilar
 ```bash
 cd ~/ros2_ws
-colcon build --packages-select caddy_ai2_description caddy_ai2_bringup
+colcon build --packages-select caddy_ai2_ros2_description caddy_ai2_bringup
 source install/setup.bash
 ```
 
@@ -219,7 +219,7 @@ ros2 topic list
 ## 🛠️ Personalización
 
 ### Modificar geometría
-Edita caddy_ai2_description/urdf/caddy_ai2.urdf.xacro:
+Edita caddy_ai2_ros2_description/urdf/caddy_ai2.urdf.xacro:
 ```xml
 <xacro:property name="wheelbase" value="1.65" />
 <xacro:property name="track_width" value="1.0068" />
@@ -241,7 +241,7 @@ Edita caddy_ai2_description/urdf/caddy_ai2.urdf.xacro:
 ### Verificar modelo URDF
 ```bash
 cd ~/ros2_ws
-xacro src/caddy_ai2/caddy_ai2_description/urdf/caddy_ai2.urdf.xacro > /tmp/caddy.urdf
+xacro src/caddy_ai2/caddy_ai2_ros2_description/urdf/caddy_ai2.urdf.xacro > /tmp/caddy.urdf
 check_urdf /tmp/caddy.urdf
 ```
 
