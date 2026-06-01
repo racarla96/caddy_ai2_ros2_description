@@ -1,0 +1,75 @@
+# Physical parameters of the Caddy AI2 robot
+# Single source of truth: read by launch files and passed to Jinja2 templates
+# for Gazebo SDF, controllers YAML, MVSim XML, and any future backends.
+
+wheelbase: 1.65       # Distance between front and rear axles (m)
+track_width: 0.91     # Distance between left and right wheel centers (m)
+wheel_radius: 0.235   # Wheel radius (m)
+max_steer_angle: 0.4  # Maximum steering angle, software command limit (rad)
+
+# Fixed structural properties
+wheel_width: 0.22               # Wheel width (m)
+wheel_mass: 8.7                 # Mass of each wheel (kg)
+height: 0.25                    # Body height used for inertia (m)
+mass: 590                       # Total vehicle mass (kg)
+vehicle_collision_width: 1.230  # Collision box width (m)
+vehicle_collision_length: 2.660 # Collision box length (m)
+vehicle_collision_height: 1.7   # Collision box height (m)
+vehicle_collision_offset_x: -0.25   # Collision box X offset from base (m)
+inertial_origin_offset_x: -0.275    # Inertial origin X offset from base (m)
+
+# Sensors — mounting pose relative to base_footprint (ground plane, canonical link).
+# Set enabled: false to exclude a sensor from the model without removing its entry.
+# type: dispatches the render function in spawn_robot.launch.py
+sensors:
+  imu_sbg_ig500n:
+    enabled: false
+    type: imu
+    package: caddy_ai2_ros2_control_sensors_sbg_ig_500n
+    frame_id: imu_link
+    pose:                   # relative to base_footprint (z = offset_from_base_link + wheel_radius)
+      x: 1.10
+      y: 0.0
+      z: 0.65              # 0.4 (from base_link) + 0.235 (wheel_radius)
+      roll: 0.0
+      pitch: 0.0
+      yaw: 0.0
+
+  navsat_generic:
+    enabled: false
+    type: gps
+    package: caddy_ai2_ros2_sensors_navsat_generic
+    frame_id: navsat_link
+    pose:
+      x: -0.825             # = -wheelbase/2, above rear axle
+      y: 0.0
+      z: 0.735              # 0.5 (from base_link) + 0.235 (wheel_radius)
+      roll: 0.0
+      pitch: 0.0
+      yaw: 0.0
+
+  sick_lms_291:
+    enabled: true
+    type: 2d_lidar
+    package: caddy_ai2_ros2_sensors_lidar_sick_lms_291
+    frame_id: lidar_sick_lms_291_link
+    pose:                   # PROVISIONAL — measure on real vehicle
+      x: 1.10               # just past the chassis front face (front at x=1.08 from base_link)
+      y: 0.0
+      z: 0.22               # 0.65m above ground (0.415m above base_link)
+      roll: 0.0
+      pitch: 0.0
+      yaw: 0.0
+
+  ydlidar_x4:
+    enabled: true
+    type: 2d_lidar
+    package: caddy_ai2_ros2_sensors_ydlidar_x4
+    frame_id: ydlidar_x4_link
+    pose:                   # PROVISIONAL — measure on real vehicle
+      x: -0.825             # rear area, above rear axle
+      y: 0.0
+      z: 1.4              # 0.15 m above base_link (0.15 + 0.235 wheel_radius)
+      roll: 0.0
+      pitch: 0.0
+      yaw: 3.14159          # rotated 180° — scans towards rear

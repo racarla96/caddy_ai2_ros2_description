@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+{#- ================================================================ #}
+{#- Computed geometry                                                 #}
+{#- ================================================================ #}
+{%- set PI = 3.1415926535897931 %}
+{%- set inertial_origin_offset_z   = 0.3 - wheel_radius %}
+{%- set vehicle_collision_offset_z = vehicle_collision_height / 2.0 - wheel_radius %}
+{%- set rect_Ixx  = (1.0/12.0) * mass * (track_width**2 + height**2) %}
+{%- set rect_Iyy  = (1.0/12.0) * mass * (wheelbase**2  + height**2) %}
+{%- set rect_Izz  = (1.0/12.0) * mass * (wheelbase**2  + track_width**2) %}
+{%- set wheel_Ixx = (1.0/12.0) * wheel_mass * (3.0*wheel_radius**2 + wheel_width**2) %}
+{%- set wheel_Iyy = wheel_Ixx %}
+{%- set wheel_Izz = (1.0/2.0)  * wheel_mass * wheel_radius**2 %}
+
+
+{#- ================================================================ #}
+{#- MACRO: sim_rear_wheel — velocity controlled (simulation)         #}
+{#- ================================================================ #}
+{%- macro sim_rear_wheel(name, y_offset) %}
+
+  <link name="{{ prefix }}{{ name }}">
+    <visual>
+      <geometry>
+        <cylinder length="{{ wheel_width }}" radius="{{ wheel_radius }}"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <inertial>
+      <mass value="{{ wheel_mass }}"/>
+      <inertia ixx="{{ wheel_Ixx }}" ixy="0" ixz="0"
+               iyy="{{ wheel_Iyy }}" iyz="0"
+               izz="{{ wheel_Izz }}"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <cylinder length="{{ wheel_width }}" radius="{{ wheel_radius }}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="{{ prefix }}{{ name }}_joint" type="continuous">
+    <parent link="{{ prefix }}base_link"/>
+    <child link="{{ prefix }}{{ name }}"/>
+    <origin xyz="{{ -wheelbase/2 }} {{ y_offset }} 0" rpy="{{ -PI/2 }} 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.01" friction="0.01"/>
+  </joint>
+{%- endmacro %}
+
+{#- ================================================================ #}
+{#- MACRO: sim_front_wheel_assembly — position controlled (sim)      #}
+{#- ================================================================ #}
+{%- macro sim_front_wheel_assembly(name, y_offset) %}
+
+  <link name="{{ prefix }}{{ name }}_steer_link">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+
+  <joint name="{{ prefix }}{{ name }}_steer_joint" type="revolute">
+    <parent link="{{ prefix }}base_link"/>
+    <child link="{{ prefix }}{{ name }}_steer_link"/>
+    <origin xyz="{{ wheelbase/2 }} {{ y_offset }} 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="{{ -max_steer_angle }}" upper="{{ max_steer_angle }}" effort="1e6" velocity="100"/>
+    <dynamics damping="1.0" friction="0.1"/>
+  </joint>
+
+  <link name="{{ prefix }}{{ name }}">
+    <visual>
+      <geometry>
+        <cylinder length="{{ wheel_width }}" radius="{{ wheel_radius }}"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <inertial>
+      <mass value="{{ wheel_mass }}"/>
+      <inertia ixx="{{ wheel_Ixx }}" ixy="0" ixz="0"
+               iyy="{{ wheel_Iyy }}" iyz="0"
+               izz="{{ wheel_Izz }}"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <cylinder length="{{ wheel_width }}" radius="{{ wheel_radius }}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="{{ prefix }}{{ name }}_joint" type="continuous">
+    <parent link="{{ prefix }}{{ name }}_steer_link"/>
+    <child link="{{ prefix }}{{ name }}"/>
+    <origin xyz="0 0 0" rpy="{{ PI/2 }} 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+{%- endmacro %}
+
+<robot name="caddy_ai2">
+
+  <!-- ==================== MATERIALS ==================== -->
+  <material name="white"><color rgba="1.0 1.0 1.0 1.0"/></material>
+  <material name="black"><color rgba="0.0 0.0 0.0 1.0"/></material>
+  <material name="red">  <color rgba="0.8 0.0 0.0 1.0"/></material>
+
+  <!-- ==================== BASE ==================== -->
+  <link name="{{ prefix }}base_footprint">
+    <visual>
+      <geometry>
+        <box size="{{ vehicle_collision_length }} {{ vehicle_collision_width }} 0.01"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+  </link>
+
+  <joint name="{{ prefix }}base_joint" type="fixed">
+    <parent link="{{ prefix }}base_footprint"/>
+    <child link="{{ prefix }}base_link"/>
+    <origin xyz="0 0 {{ wheel_radius }}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="{{ prefix }}base_link">
+    <inertial>
+      <origin xyz="{{ inertial_origin_offset_x }} 0 {{ inertial_origin_offset_z }}" rpy="0 0 0"/>
+      <mass value="{{ mass }}"/>
+      <inertia ixx="{{ rect_Ixx }}" ixy="0" ixz="0"
+               iyy="{{ rect_Iyy }}" iyz="0"
+               izz="{{ rect_Izz }}"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="file://{{ desc_share }}/description/model/meshes/stl/rbcar_chassis.stl"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <origin xyz="{{ vehicle_collision_offset_x }} 0 {{ vehicle_collision_offset_z }}" rpy="0 0 0"/>
+      <geometry>
+        <box size="{{ vehicle_collision_length }} {{ vehicle_collision_width }} {{ vehicle_collision_height }}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- ==================== WHEELS (simulation — Ackermann, individual joints) ==================== -->
+  {{ sim_front_wheel_assembly("front_right_wheel", -(track_width/2)) }}
+  {{ sim_front_wheel_assembly("front_left_wheel",   (track_width/2)) }}
+  {{ sim_rear_wheel("rear_right_wheel", -(track_width/2)) }}
+  {{ sim_rear_wheel("rear_left_wheel",   (track_width/2)) }}
+
+  <!-- ==================== AXLE CENTER LINKS ==================== -->
+  <link name="{{ prefix }}front_axle_center_link">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <joint name="{{ prefix }}front_axle_center_joint" type="fixed">
+    <parent link="{{ prefix }}base_link"/>
+    <child link="{{ prefix }}front_axle_center_link"/>
+    <origin xyz="{{ wheelbase/2 }} 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="{{ prefix }}rear_axle_center_link">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <joint name="{{ prefix }}rear_axle_center_joint" type="fixed">
+    <parent link="{{ prefix }}base_link"/>
+    <child link="{{ prefix }}rear_axle_center_link"/>
+    <origin xyz="{{ -wheelbase/2 }} 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ==================== SENSOR FRAMES ==================== -->
+{{ sensors_urdf_fragment | default('') }}
+
+{%- block extension %}{% endblock %}
+
+</robot>

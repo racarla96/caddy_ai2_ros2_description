@@ -10,8 +10,14 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 
 install(
-  DIRECTORY config meshes
+  DIRECTORY bringup description
   DESTINATION share/${PROJECT_NAME}
+)
+
+install(
+  PROGRAMS bringup/scripts/render_urdf.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME render_urdf
 )
 
 ament_package()

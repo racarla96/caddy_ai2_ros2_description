@@ -2,19 +2,34 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>caddy_ai2_ros2_description</name>
-  <version>0.0.1</version>
-  <description>TODO: Package description</description>
+  <version>1.0.0</version>
+  <description>
+    Robot description package for the Caddy AI2 agricultural vehicle.
+    Provides the URDF Jinja2 template, physical parameters (robot_params.yaml),
+    chassis mesh and a display launch for RViz visualization.
+    Single source of truth for robot geometry shared across all other packages.
+  </description>
+
   <maintainer email="rinese@todo.todo">rinese</maintainer>
   <maintainer email="racarla96@gmail.com">racarla96</maintainer>
+
+  <author>Ricardo (rinese89)</author>
+  <author>Rafael Carbonell Lázaro (racarla96)</author>
+  <author>Claude Sonnet (Anthropic)</author>
+
   <license>CC BY 4.0</license>
+  <url type="repository">https://github.com/racarla96/caddy_ai2</url>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>python3-jinja2</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
-
-  <exec_depend>caddy_ai2_ros2_simulation</exec_depend> <!-- Para el plugin -->
-  <exec_depend>gz_ros2_control</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
