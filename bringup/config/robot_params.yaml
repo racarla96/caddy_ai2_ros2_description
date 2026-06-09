@@ -23,7 +23,7 @@ inertial_origin_offset_x: -0.275    # Inertial origin X offset from base (m)
 # type: dispatches the render function in spawn_robot.launch.py
 sensors:
   imu_sbg_ig500n:
-    enabled: false
+    enabled: true
     type: imu
     package: caddy_ai2_ros2_control_sensors_sbg_ig_500n
     frame_id: imu_link
@@ -36,9 +36,9 @@ sensors:
       yaw: 0.0
 
   navsat_generic:
-    enabled: false
+    enabled: true
     type: gps
-    package: caddy_ai2_ros2_sensors_navsat_generic
+    package: caddy_ai2_ros2_control_sensors_sbg_ig_500n
     frame_id: navsat_link
     pose:
       x: -0.825             # = -wheelbase/2, above rear axle
