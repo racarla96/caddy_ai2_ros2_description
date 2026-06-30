@@ -172,6 +172,20 @@
     <origin xyz="{{ -wheelbase/2 }} 0 0" rpy="0 0 0"/>
   </joint>
 
+  <!-- ==================== VEHICLE DYNAMICS LINKS ==================== -->
+  <!-- CG: 1.1 m behind front axle, 0.55 m ahead of rear axle, 0.3 m above ground -->
+  <link name="{{ prefix }}cg_link">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <joint name="{{ prefix }}cg_joint" type="fixed">
+    <parent link="{{ prefix }}base_link"/>
+    <child link="{{ prefix }}cg_link"/>
+    <origin xyz="{{ wheelbase/2 - 1.1 }} 0 {{ 0.3 - wheel_radius }}" rpy="0 0 0"/>
+  </joint>
+
   <!-- ==================== SENSOR FRAMES ==================== -->
 {{ sensors_urdf_fragment | default('') }}
 

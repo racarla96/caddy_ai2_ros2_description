@@ -26,33 +26,33 @@ sensors:
     enabled: true
     type: imu
     package: caddy_ai2_ros2_control_sensors_sbg_ig_500n
-    frame_id: imu_link
+    frame_id: imu_sbg_ig500n_link
     pose:                   # relative to base_footprint (z = offset_from_base_link + wheel_radius)
-      x: 1.10
+      x: 0.825              # above front axle (wheelbase/2)
       y: 0.0
-      z: 0.65              # 0.4 (from base_link) + 0.235 (wheel_radius)
+      z: 0.655             # 0.42 (from base_link) + 0.235 (wheel_radius)
       roll: 0.0
       pitch: 0.0
       yaw: 0.0
 
-  navsat_generic:
+  gps_sbg_ig500n:
     enabled: true
     type: gps
     package: caddy_ai2_ros2_control_sensors_sbg_ig_500n
-    frame_id: navsat_link
+    frame_id: gps_sbg_ig500n_link
     pose:
-      x: -0.825             # = -wheelbase/2, above rear axle
+      x: 1.10               # same as sick_lms_291, centered on top of it
       y: 0.0
-      z: 0.735              # 0.5 (from base_link) + 0.235 (wheel_radius)
+      z: 0.364              # top of SICK body (0.22 + 0.134) + half GPS box height (0.01)
       roll: 0.0
       pitch: 0.0
       yaw: 0.0
 
-  sick_lms_291:
+  lidar_2d_sick_lms_291:
     enabled: true
-    type: 2d_lidar
+    type: lidar_2d
     package: caddy_ai2_ros2_sensors_lidar_sick_lms_291
-    frame_id: lidar_sick_lms_291_link
+    frame_id: lidar_2d_sick_lms_291_link
     pose:                   # PROVISIONAL — measure on real vehicle
       x: 1.10               # just past the chassis front face (front at x=1.08 from base_link)
       y: 0.0
@@ -61,11 +61,11 @@ sensors:
       pitch: 0.0
       yaw: 0.0
 
-  ydlidar_x4:
+  lidar_2d_ydlidar_x4:
     enabled: true
-    type: 2d_lidar
+    type: lidar_2d
     package: caddy_ai2_ros2_sensors_ydlidar_x4
-    frame_id: ydlidar_x4_link
+    frame_id: lidar_2d_ydlidar_x4_link
     pose:                   # PROVISIONAL — measure on real vehicle
       x: -0.825             # rear area, above rear axle
       y: 0.0
