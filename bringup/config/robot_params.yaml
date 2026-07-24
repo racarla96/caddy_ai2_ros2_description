@@ -43,7 +43,7 @@ sensors:
     pose:                   # relative to base_link
       x: 1.10               # same as sick_lms_291, centered on top of it
       y: 0.0
-      z: 0.559              # SICK aperture (0.415) + SICK body height (0.134) + half GPS box (0.01)
+      z: 0.129              # SICK aperture (0.22) + SICK body (0.134) + half GPS box (0.01) - wheel_radius (0.235)
       roll: 0.0
       pitch: 0.0
       yaw: 0.0
@@ -56,7 +56,7 @@ sensors:
     pose:                   # relative to base_link — PROVISIONAL, measure on real vehicle
       x: 1.10               # just past the chassis front face (front at x=1.08 from base_link)
       y: 0.0
-      z: 0.415              # laser aperture 0.65m above ground - 0.235m wheel_radius
+      z: -0.015             # laser aperture 0.22m above ground - 0.235m wheel_radius
       roll: 0.0
       pitch: 0.0
       yaw: 0.0
