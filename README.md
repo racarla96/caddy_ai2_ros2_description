@@ -61,7 +61,8 @@ El paquete usa **Jinja2** como motor de plantillas. Los parámetros físicos se 
 | `wheel_mass` | 8.7 | kg | Masa de cada rueda |
 | `vehicle_collision_length` | 2.660 | m | Longitud del box de colisión |
 | `vehicle_collision_width` | 1.230 | m | Anchura del box de colisión |
-| `vehicle_collision_height` | 1.7 | m | Altura del box de colisión |
+| `vehicle_collision_height` | 1.7 | m | Altura total del box de colisión, medida desde el suelo |
+| `vehicle_collision_ground_clearance` | 0.20 | m | Altura libre entre el suelo y la cara inferior del box. Con 0 el chasis roza el suelo |
 | `vehicle_collision_offset_x` | -0.25 | m | Offset X del box de colisión respecto a `base_link` |
 | `inertial_origin_offset_x` | -0.275 | m | Offset X del origen inercial respecto a `base_link` |
 

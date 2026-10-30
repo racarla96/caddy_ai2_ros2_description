@@ -4,7 +4,11 @@
 {#- ================================================================ #}
 {%- set PI = 3.1415926535897931 %}
 {%- set inertial_origin_offset_z   = 0.3 - wheel_radius %}
-{%- set vehicle_collision_offset_z = vehicle_collision_height / 2.0 - wheel_radius %}
+{#- The collision box spans [clearance, vehicle_collision_height] above the ground. With clearance=0 its  #}
+{#- underside is flush with the wheel contact plane and drags on any floor mesh seam.                    #}
+{%- set vehicle_ground_clearance = vehicle_collision_ground_clearance | default(0.0) %}
+{%- set vehicle_collision_box_height = vehicle_collision_height - vehicle_ground_clearance %}
+{%- set vehicle_collision_offset_z = vehicle_ground_clearance + vehicle_collision_box_height / 2.0 - wheel_radius %}
 {%- set rect_Ixx  = (1.0/12.0) * mass * (track_width**2 + height**2) %}
 {%- set rect_Iyy  = (1.0/12.0) * mass * (wheelbase**2  + height**2) %}
 {%- set rect_Izz  = (1.0/12.0) * mass * (wheelbase**2  + track_width**2) %}
@@ -136,7 +140,7 @@
     <collision>
       <origin xyz="{{ vehicle_collision_offset_x }} 0 {{ vehicle_collision_offset_z }}" rpy="0 0 0"/>
       <geometry>
-        <box size="{{ vehicle_collision_length }} {{ vehicle_collision_width }} {{ vehicle_collision_height }}"/>
+        <box size="{{ vehicle_collision_length }} {{ vehicle_collision_width }} {{ vehicle_collision_box_height }}"/>
       </geometry>
     </collision>
   </link>
