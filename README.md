@@ -76,6 +76,8 @@ Los sensores habilitados y sus poses de montaje se definen en la sección `senso
 | `sick_lms_291` | 2D LiDAR | habilitado | `lidar_sick_lms_291_link` | pose PROVISIONAL |
 | `ydlidar_x4` | 2D LiDAR | habilitado | `ydlidar_x4_link` | pose PROVISIONAL, apunta hacia atrás (yaw=π) |
 | `navsat_generic` | GPS | deshabilitado | `navsat_link` | — |
+| `zed_2i_left`, `zed_2i_right` | cámara RGB-D | habilitado | `zed_2i_left_link`, `zed_2i_right_link` | disposición A (dos delanteras hacia fuera), pose PROVISIONAL |
+| `zed_2i_front`, `zed_2i_rear` | cámara RGB-D | deshabilitado | `zed_2i_front_link`, `zed_2i_rear_link` | disposición B (una delante y otra detrás), activar solo una disposición a la vez |
 
 ---
 

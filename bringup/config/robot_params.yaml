@@ -74,3 +74,63 @@ sensors:
       roll: 0.0
       pitch: 0.0
       yaw: 0.0
+
+  # --- ZED 2i cameras on the top bar: layout study --------------------------------------------
+  # Two layouts, enable ONE pair at a time (the other pair must stay enabled: false).
+  # All poses are PROVISIONAL (bar position and height not measured yet).
+  # Horizontal FOV H = 110 deg (2.1 mm lens). With outward yaw +-theta: overlap = H - 2*theta,
+  # total coverage = H + 2*theta.
+  #
+  # Layout A — both forward, at the bar ends, yaw +-40 deg outward: 30 deg central overlap, 190 deg total.
+  zed_2i_left:
+    enabled: true
+    type: camera_rgbd
+    package: caddy_ai2_ros2_camera_zed_2i
+    frame_id: zed_2i_left_link
+    pose:                   # relative to base_link
+      x: 0.6
+      y: 0.5
+      z: 1.45
+      roll: 0.0
+      pitch: 0.0
+      yaw: 0.698            # 40 deg, to the left
+
+  zed_2i_right:
+    enabled: true
+    type: camera_rgbd
+    package: caddy_ai2_ros2_camera_zed_2i
+    frame_id: zed_2i_right_link
+    pose:
+      x: 0.6
+      y: -0.5
+      z: 1.45
+      roll: 0.0
+      pitch: 0.0
+      yaw: -0.698           # 40 deg, to the right
+
+  # Layout B — one forward, one backward, both centered: 2 x 110 deg, no overlap, 2 x 70 deg blind at the sides.
+  zed_2i_front:
+    enabled: false
+    type: camera_rgbd
+    package: caddy_ai2_ros2_camera_zed_2i
+    frame_id: zed_2i_front_link
+    pose:
+      x: 0.6
+      y: 0.0
+      z: 1.45
+      roll: 0.0
+      pitch: 0.0
+      yaw: 0.0
+
+  zed_2i_rear:
+    enabled: false
+    type: camera_rgbd
+    package: caddy_ai2_ros2_camera_zed_2i
+    frame_id: zed_2i_rear_link
+    pose:
+      x: 0.6
+      y: 0.0
+      z: 1.45
+      roll: 0.0
+      pitch: 0.0
+      yaw: 3.14159          # facing backwards
