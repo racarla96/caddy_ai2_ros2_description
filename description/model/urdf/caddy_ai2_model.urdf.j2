@@ -120,7 +120,9 @@
   <joint name="{{ prefix }}base_joint" type="fixed">
     <parent link="{{ prefix }}base_footprint"/>
     <child link="{{ prefix }}base_link"/>
-    <origin xyz="0 0 {{ wheel_radius }}" rpy="0 0 0"/>
+    <!-- base_footprint_offset_x: distancia de base_footprint a base_link. 0 (por defecto): base_footprint bajo base_link.
+         wheelbase/2: base_footprint bajo el eje trasero, que es donde los controladores de direccion calculan la odometria. -->
+    <origin xyz="{{ base_footprint_offset_x | default(0.0) }} 0 {{ wheel_radius }}" rpy="0 0 0"/>
   </joint>
 
   <link name="{{ prefix }}base_link">
