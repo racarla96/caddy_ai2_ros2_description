@@ -52,7 +52,7 @@ sensors:
   lidar_2d_sick_lms_291:
     enabled: true
     type: lidar_2d
-    package: caddy_ai2_ros2_sensors_lidar_sick_lms_291
+    package: caddy_ai2_ros2_sensors_sick_lms_291
     frame_id: lidar_2d_sick_lms_291_link
     pose:                   # relative to base_link — PROVISIONAL, measure on real vehicle
       x: 1.10               # just past the chassis front face (front at x=1.08 from base_link)
